@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 420" role="img" aria-label="CHARTER four verdicts: ALLOW, STEER, ASK, BLOCK">
+  <rect width="1200" height="420" fill="#09090b"/>
+  <text x="48" y="52" fill="#f4f4f1" font-family="Georgia, Times New Roman, serif" font-size="34">CHARTER</text>
+  <text x="48" y="80" fill="#8a8a84" font-family="ui-sans-serif, system-ui, sans-serif" font-size="15">The LLM writes. Code enforces. Judgment is a syscall.</text>
+
+  <g font-family="ui-sans-serif, system-ui, sans-serif">
+    <rect x="48" y="112" width="258" height="168" rx="16" fill="#121214" stroke="#2a2a2c"/>
+    <text x="72" y="156" fill="#8fad8c" font-family="Georgia, Times New Roman, serif" font-size="36">ALLOW</text>
+    <text x="72" y="188" fill="#8a8a84" font-size="14">Permitted</text>
+    <text x="72" y="228" fill="#f4f4f1" font-size="13">npm test</text>
+    <text x="72" y="250" fill="#5c5c58" font-size="12">no clause fired</text>
+
+    <rect x="330" y="112" width="258" height="168" rx="16" fill="#121214" stroke="#2a2a2c"/>
+    <text x="354" y="156" fill="#b7a57a" font-family="Georgia, Times New Roman, serif" font-size="36">STEER</text>
+    <text x="354" y="188" fill="#8a8a84" font-size="14">Redirect the worker</text>
+    <text x="354" y="228" fill="#f4f4f1" font-size="13">prettier --write src/**</text>
+    <text x="354" y="250" fill="#5c5c58" font-size="12">goal was a typo</text>
+
+    <rect x="612" y="112" width="258" height="168" rx="16" fill="#121214" stroke="#2a2a2c"/>
+    <text x="636" y="156" fill="#c4a35a" font-family="Georgia, Times New Roman, serif" font-size="36">ASK</text>
+    <text x="636" y="188" fill="#8a8a84" font-size="14">Ask the user first</text>
+    <text x="636" y="228" fill="#f4f4f1" font-size="13">DROP TABLE stale_sessions</text>
+    <text x="636" y="250" fill="#5c5c58" font-size="12">user named it</text>
+
+    <rect x="894" y="112" width="258" height="168" rx="16" fill="#121214" stroke="#2a2a2c"/>
+    <text x="918" y="156" fill="#c45c4a" font-family="Georgia, Times New Roman, serif" font-size="36">BLOCK</text>
+    <text x="918" y="188" fill="#8a8a84" font-size="14">Do not run</text>
+    <text x="918" y="228" fill="#f4f4f1" font-size="13">rm -rf / · curl | sh</text>
+    <text x="918" y="250" fill="#5c5c58" font-size="12">mechanical cut, no model</text>
+  </g>
+
+  <text x="48" y="328" fill="#5c5c58" font-family="ui-sans-serif, system-ui, sans-serif" font-size="13">mechanical cuts first · then a hazard battery · then policy.ts is the court</text>
+  <text x="48" y="362" fill="#8a8a84" font-family="ui-monospace, SFMono-Regular, Menlo, monospace" font-size="13">injection BLOCK · leak BLOCK · invented destruction BLOCK · named destruction ASK · scope STEER</text>
+  <text x="48" y="394" fill="#5c5c58" font-family="ui-sans-serif, system-ui, sans-serif" font-size="12">Not TypeSafe Jev. Not a Cursor plugin. A portable constitution for coding agents.</text>
+</svg>

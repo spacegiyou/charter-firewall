@@ -25,31 +25,45 @@ export const THRESHOLDS = {
   userAuthorized: 0.75,
 } as const;
 
+function traces(rows: PolicyTrace[]): PolicyTrace[] {
+  return rows;
+}
+
 export function decideAction(
   a: ActionAnswers,
   userExplicitlyAsked: boolean,
   mechanical: string | null,
 ): Decision {
   if (mechanical) {
-    return { verdict: "BLOCK", reason: mechanical, mechanical: true, traces: [{ rule: mechanical, fired: true }] };
+    return {
+      verdict: "BLOCK",
+      reason: mechanical,
+      mechanical: true,
+      traces: traces([{ rule: mechanical, fired: true }]),
+    };
   }
+
   const t: PolicyTrace[] = [];
   const fire = (rule: string, fired: boolean) => {
     t.push({ rule, fired });
     return fired;
   };
-  if (fire(`injection >= ${THRESHOLDS.holdInjection}`, a.injection >= THRESHOLDS.holdInjection)) {
-    return { verdict: "BLOCK", reason: "Judged as prompt injection", mechanical: false, traces: t };
+
+  if (fire(`injection ≥ ${THRESHOLDS.holdInjection}`, a.injection >= THRESHOLDS.holdInjection)) {
+    return block("Judged as prompt injection", t);
   }
   if (
-    fire(`exfiltration >= ${THRESHOLDS.holdExfil}`, a.exfiltration >= THRESHOLDS.holdExfil) ||
-    fire(`credentials >= ${THRESHOLDS.holdCreds}`, a.credentials >= THRESHOLDS.holdCreds)
+    fire(`exfiltration ≥ ${THRESHOLDS.holdExfil}`, a.exfiltration >= THRESHOLDS.holdExfil) ||
+    fire(`credentials ≥ ${THRESHOLDS.holdCreds}`, a.credentials >= THRESHOLDS.holdCreds)
   ) {
-    return { verdict: "BLOCK", reason: "Exfiltration or credential leak", mechanical: false, traces: t };
+    return block("Exfiltration or credential leak", t);
   }
-  const destructive = a.irreversible >= THRESHOLDS.holdIrreversible || a.blastRadius >= THRESHOLDS.askBlast;
-  fire(`irreversible >= ${THRESHOLDS.holdIrreversible}`, a.irreversible >= THRESHOLDS.holdIrreversible);
-  fire(`blast >= ${THRESHOLDS.askBlast}`, a.blastRadius >= THRESHOLDS.askBlast);
+
+  const destructive =
+    a.irreversible >= THRESHOLDS.holdIrreversible || a.blastRadius >= THRESHOLDS.askBlast;
+  fire(`irreversible ≥ ${THRESHOLDS.holdIrreversible}`, a.irreversible >= THRESHOLDS.holdIrreversible);
+  fire(`blast ≥ ${THRESHOLDS.askBlast}`, a.blastRadius >= THRESHOLDS.askBlast);
+
   if (destructive) {
     const authorized = userExplicitlyAsked || a.userAuthorized >= THRESHOLDS.userAuthorized;
     fire("user authorized destructive action", authorized);
@@ -61,9 +75,10 @@ export function decideAction(
         traces: t,
       };
     }
-    return { verdict: "BLOCK", reason: "Model invented a destructive action", mechanical: false, traces: t };
+    return block("Model invented a destructive action", t);
   }
-  if (fire(`scope_creep >= ${THRESHOLDS.steerScope}`, a.scopeCreep >= THRESHOLDS.steerScope)) {
+
+  if (fire(`scope_creep ≥ ${THRESHOLDS.steerScope}`, a.scopeCreep >= THRESHOLDS.steerScope)) {
     return {
       verdict: "STEER",
       reason: "Off-goal work — run it, but tell the worker to get back on the task",
@@ -71,7 +86,13 @@ export function decideAction(
       traces: t,
     };
   }
-  return { verdict: "ALLOW", reason: "No clause fired", mechanical: false, traces: t };
+
+  return {
+    verdict: "ALLOW",
+    reason: "No clause fired",
+    mechanical: false,
+    traces: t,
+  };
 }
 
 export function decideWrite(a: WriteAnswers): Decision {
@@ -97,7 +118,12 @@ export function decideWrite(a: WriteAnswers): Decision {
       traces: t,
     };
   }
-  return { verdict: "ALLOW", reason: "Write clauses passed", mechanical: false, traces: t };
+  return {
+    verdict: "ALLOW",
+    reason: "Write clauses passed",
+    mechanical: false,
+    traces: t,
+  };
 }
 
 export function decideTurn(a: TurnAnswers): Decision {
@@ -138,7 +164,12 @@ export function decideTurn(a: TurnAnswers): Decision {
       traces: t,
     };
   }
-  return { verdict: "ALLOW", reason: "Continue", mechanical: false, traces: t };
+  return {
+    verdict: "ALLOW",
+    reason: "Continue",
+    mechanical: false,
+    traces: t,
+  };
 }
 
 export function decideMemoryCall(
@@ -148,7 +179,14 @@ export function decideMemoryCall(
   keepThreshold = THRESHOLDS.keep,
 ): MemoryDecision {
   if (call.pinned) {
-    return { id: call.id, tool: call.tool, keepCall: 1, keepResult: 1, action: "keep", reason: "pinned" };
+    return {
+      id: call.id,
+      tool: call.tool,
+      keepCall: 1,
+      keepResult: 1,
+      action: "keep",
+      reason: "pinned",
+    };
   }
   let action: MemoryAction;
   let reason: string;
@@ -163,6 +201,10 @@ export function decideMemoryCall(
     reason = "call_dropped";
   }
   return { id: call.id, tool: call.tool, keepCall, keepResult, action, reason };
+}
+
+function block(reason: string, t: PolicyTrace[]): Decision {
+  return { verdict: "BLOCK", reason, mechanical: false, traces: t };
 }
 
 export function verdictCopy(v: Verdict): { title: string; subtitle: string } {

@@ -1,6 +1,9 @@
 export type HookKind = "action" | "write" | "turn" | "memory";
+
 export type Verdict = "ALLOW" | "STEER" | "ASK" | "BLOCK";
+
 export type ToolName = "bash" | "write" | "edit" | "apply_patch" | "read";
+
 export type BlastLevel = 0 | 1 | 2 | 3;
 
 export interface ToolCall {
