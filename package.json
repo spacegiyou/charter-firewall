@@ -1,0 +1,15 @@
+{
+  "name": "charter-firewall",
+  "version": "0.1.0",
+  "private": false,
+  "type": "module",
+  "license": "MIT",
+  "description": "Constitutional firewall for coding agents. The LLM writes. Code enforces.",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/spacegiyou/charter-firewall.git"
+  },
+  "scripts": {
+    "replay": "node examples/replay.mjs"
+  }
+}
